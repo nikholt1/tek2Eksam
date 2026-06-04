@@ -6,6 +6,7 @@ import com.example.demo.log.repository.LogRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class LogService {
@@ -27,5 +28,9 @@ public class LogService {
         }
 
         return saved;
+    }
+
+    public List<LogEntity> getAllLogs() {
+        return logRepository.findAll();
     }
 }
