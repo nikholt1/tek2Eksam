@@ -1,0 +1,228 @@
+⚙️ 1. CI/CD og GitHub Actions
+1. Hvilke tjek laver man i CI-pipeline?
+
+Typiske CI (Continuous Integration) checks:
+
+✔️ Build (kompiler kode)
+✔️ Unit tests
+✔️ Linting (kodekvalitet)
+✔️ Security checks (SAST)
+✔️ Dependency check (sårbarheder)
+✔️ Packaging (JAR / Docker image)
+
+👉 Formål:
+
+“Sikre at kode ikke bryder main branch”
+
+2. jobs vs steps i GitHub Actions
+🧩 jobs:
+Separate “kørsler”
+Kan køre parallelt
+Kører på hver sin runner
+🪜 steps:
+Sekventielle handlinger i ét job
+Kører i samme miljø
+
+👉 Kort sagt:
+
+job = “maskine”
+step = “handlinger på maskinen”
+3. uses vs run
+uses:
+Genbruger actions (færdige plugins)
+
+Eksempel:
+
+uses: actions/checkout@v4
+run:
+Kører shell commands direkte
+
+Eksempel:
+
+run: mvn test
+4. Hvornår er run nyttig?
+
+Bruges til:
+
+build commands
+tests
+scripts
+Docker commands
+deployment scripts
+
+Eksempler:
+
+run: mvn clean install
+run: npm test
+run: docker build -t app .
+5. Caching i GitHub Actions + cache key
+
+Caching = genbrug af dependencies
+
+Eksempel:
+
+Maven dependencies
+Node modules
+Cache key:
+unik identifikator
+ofte baseret på hash af dependencies
+
+Eksempel:
+
+key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+
+👉 Hvis pom.xml ændrer sig → cache invalidates
+
+6. Hash-pinning (vigtigt eksamenspunkt)
+
+Hash-pinning betyder:
+
+Du låser en action til en specifik version via commit hash
+
+Eksempel:
+
+❌ Uden pin:
+
+uses: actions/checkout@v4
+
+✔️ Med pin:
+
+uses: actions/checkout@f43a2b91c0d...
+
+👉 Fordel:
+
+Sikkerhed
+Ingen “supply chain changes”
+Reproducerbare builds
+7. Maven lifecycle i CI
+
+Apache Maven
+
+Typiske CI-stages:
+
+validate
+compile
+test ⭐ vigtigst i CI
+package ⭐ ofte i CI/CD
+verify
+install (sjældnere i CI)
+deploy (CD del)
+
+👉 I CI bruger man især:
+
+test
+package
+8. Manuel trigger af workflow
+
+Brug:
+
+on:
+  workflow_dispatch:
+
+👉 Giver knap i GitHub UI:
+
+“Run workflow”
+
+9. Docker build + push i GitHub Actions
+
+Typisk flow:
+
+- name: Build Docker image
+  run: docker build -t myapp .
+
+- name: Login to registry
+  run: echo $TOKEN | docker login ghcr.io -u USER --password-stdin
+
+- name: Push image
+  run: docker push myapp
+
+👉 bruges til deployment i cloud pipelines
+
+💻 DEMONSTRATIONER
+1. Java CI pipeline (Maven)
+name: Java CI
+
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+
+      - name: Build and test
+        run: mvn clean test
+
+👉 Forklaring:
+
+checkout → henter kode
+setup-java → runtime
+mvn test → CI check
+2. Maven caching (meget vigtigt i eksamen)
+- name: Cache Maven dependencies
+  uses: actions/cache@v4
+  with:
+    path: ~/.m2
+    key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+    restore-keys: |
+      ${{ runner.os }}-maven-
+
+👉 Effekt:
+
+hurtigere builds
+genbrug dependencies
+3. workflow_dispatch (manuel CI)
+on:
+  push:
+  workflow_dispatch:
+
+👉 Du kan nu:
+
+trykke “Run workflow”
+teste CI uden commit
+4. Hash-pinning af action (sikkerhed)
+
+Eksempel:
+
+uses: actions/checkout@f43a2b91c0d7e9a...
+
+👉 Forklaring:
+
+sikrer at action ikke ændres
+bruges i production pipelines
+🧠 EKSAMENSFORSTÅELSE (det vigtigste)
+
+Hvis du vil score højt, så forklar sådan her:
+
+CI/CD mindset:
+CI = build + test
+CD = deploy
+GitHub Actions struktur:
+workflow → hele pipeline
+jobs → parallel execution units
+steps → sekventielle tasks
+Security + reliability:
+caching = performance
+hash pinning = security
+workflow_dispatch = manual control
+Cloud connection:
+build → test → docker → deploy
+VM / cloud runner kan være target
+🔥 Hvis du vil gøre det endnu stærkere
+
+Jeg kan hjælpe dig med at kombinere alt du har (Linux + Cloud + CI/CD) til:
+
+👉 en 5–10 minutters eksamens-demo story
+
+Git push
+GitHub Actions kører
+VM deploy via Tailscale
+health check endpoint
+firewall demo
+
+Det er den type setup der næsten garanterer topkarakter hvis du forklarer det godt.

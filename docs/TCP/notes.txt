@@ -1,0 +1,218 @@
+🌐 3. TCP/IP
+1. Netværkslag (TCP/IP og OSI)
+🧱 OSI-modellen (7 lag)
+Physical (kabler, signaler)
+Data Link (MAC, switches)
+Network (IP, routing)
+Transport (TCP/UDP)
+Session
+Presentation
+Application (HTTP, DNS osv.)
+🌐 TCP/IP modellen (4 lag)
+Link (Data Link + Physical)
+Internet (IP)
+Transport (TCP/UDP)
+Application (HTTP, DNS osv.)
+
+👉 TCP/IP er den praktiske model, OSI er den teoretiske.
+
+2. IP-adresse vs MAC-adresse
+🌍 IP-adresse
+Logisk adresse
+Kan ændres
+Bruges til routing over netværk
+🔗 MAC-adresse
+Hardware adresse (NIC)
+Unik for netværkskort
+Bruges lokalt i netværk
+3. Hvorfor kan jeg ikke se MAC på ek.dk?
+
+Fordi:
+
+MAC adresser virker kun på lokalnet (LAN)
+Routere fjerner Layer 2 information
+Internettet arbejder på IP (Layer 3)
+
+👉 Wireshark kan kun se MAC på dit eget netværk
+
+4. Router vs Switch
+🔀 Switch
+Arbejder på MAC niveau
+Sender data internt i LAN
+🌐 Router
+Arbejder på IP niveau
+Forbinder netværk (LAN → Internet)
+📡 PRAKTISKE SPØRGSMÅL
+5. Lokal IP vs public IP
+Lokal IP
+Fx 192.168.x.x
+Bruges internt i netværk
+Public IP
+Synlig på internettet
+Tildeles af ISP
+6. Wireshark filtrering
+
+Wireshark
+
+Filtrér hjemmeside:
+http.host == "ek.dk"
+Protokol filtrering:
+tcp
+udp
+dns
+dhcp
+7. Hvad er en port?
+Identificerer service på en maskine
+IP = maskine
+Port = program
+Eksempler:
+80 → HTTP
+443 → HTTPS
+22 → SSH
+3306 → MySQL
+8. src og dst IP
+src = sender
+dst = modtager
+
+👉 i en pakke:
+
+src IP = hvor den kommer fra
+dst IP = hvor den går hen
+9. src port og dst port
+src port = midlertidig klientport
+dst port = service port
+
+Eksempel:
+
+src: 51234 → dst: 443
+
+👉 klient → webserver
+
+10. SYN, ACK, FIN (TCP flags)
+🔗 SYN
+Start connection
+✅ ACK
+Bekræftelse
+🔚 FIN
+Luk connection
+TCP handshake:
+SYN
+SYN-ACK
+ACK
+
+👉 ses i Wireshark under “Info” kolonnen
+
+11. TCP vs UDP
+TCP
+Forbindelsesorienteret
+Pålidelig
+Har ACK, retransmission
+UDP
+Hurtig
+Ingen garanti
+Bruges til streaming, gaming
+12. Sequence + ACK numbers
+Sequence number
+Rækkefølge af data
+ACK number
+Bekræfter modtaget data
+
+👉 bruges til:
+
+korrekt levering
+flow control
+💻 DEMONSTRATIONER
+1. OSI / TCP/IP model forklaring
+
+👉 Forklar lagene + giv eksempel:
+
+HTTP (app)
+TCP (transport)
+IP (internet)
+Ethernet (link)
+2. Find IP adresser
+Linux:
+ip a
+Public IP:
+curl ifconfig.me
+3. nslookup og ping
+
+nslookup
+
+nslookup ek.dk
+
+👉 viser DNS → IP mapping
+
+ping ek.dk
+
+👉 tester connectivity
+
+4. Wireshark filtering (website / VM)
+ip.addr == 192.168.1.10
+
+eller:
+
+tcp.port == 8080
+5. DHCP i Wireshark
+
+DHCP
+
+Filter:
+
+dhcp
+
+👉 viser:
+
+Discover
+Offer
+Request
+ACK
+6. TCP handshake (curl demo)
+curl http://example.com
+
+I Wireshark ser du:
+
+SYN
+SYN-ACK
+ACK
+7. TCP teardown
+
+Når connection lukkes:
+
+FIN
+ACK
+FIN
+ACK
+
+👉 vises i Wireshark som “FIN, ACK”
+
+🧠 EKSAMENSFORSTÅELSE (det vigtige)
+Netværksmodeller:
+OSI = teori
+TCP/IP = praksis
+Adresser:
+MAC = lokal hardware
+IP = global routing
+Port = service
+Trafik:
+TCP = sikker + handshake
+UDP = hurtig + ingen garanti
+Wireshark:
+ser packets live
+viser lagene tydeligt
+bruges til debugging
+Router vs switch:
+switch = LAN
+router = internet
+🔥 Hvis du vil løfte det til topkarakter
+
+Jeg kan samle alt du har fået (Linux + Docker + CI/CD + Cloud + TCP/IP) til:
+
+👉 en fuld 10/10 eksamens-story
+
+Git push
+CI pipeline
+Docker build
+VM deploy via Tailscale
+firewall + port check
+Wireshark TCP handshake demo

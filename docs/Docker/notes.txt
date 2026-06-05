@@ -1,0 +1,235 @@
+🐳 2. Docker, Docker Compose, Dockerfile
+1. Dockerfile vs image vs container
+📄 Dockerfile
+
+Docker instruktioner til hvordan et image bygges.
+
+👉 “Opskriften”
+
+🧱 Image
+Read-only snapshot
+Indeholder app + dependencies
+
+👉 “Resultatet af opskriften”
+
+🚀 Container
+Kørende instance af et image
+Har runtime + isoleret miljø
+
+👉 “Det der faktisk kører”
+
+2. Dockerfile + build cache
+
+Docker bygger i lag:
+
+Hvert step = et layer
+Cache bruges hvis step ikke ændrer sig
+
+Eksempel:
+
+COPY ændret → alt efter invalidates
+ellers genbruges cache
+
+👉 Fordel:
+
+hurtigere builds
+3. FROM maven:3.9.9-eclipse-temurin-21
+FROM maven:3.9.9-eclipse-temurin-21
+
+👉 betyder:
+
+Maven 3.9.9 (build tool)
+Java 21 (Eclipse Temurin distribution)
+
+👉 Bruges til:
+
+Java builds i container
+4. Multi-stage builds
+
+👉 Formål: reducere image størrelse
+
+Før:
+build tools + runtime i samme image
+Efter:
+stage 1: build
+stage 2: runtime only
+
+Fordele:
+
+mindre images
+mere secure
+cleaner deployment
+5. Volume mount
+
+👉 forbinder host filesystem med container
+
+Bruges til:
+
+data persistence
+logs
+dev hot reload
+
+Eksempel:
+
+-v ./data:/app/data
+
+👉 Data overlever container restart
+
+6. COPY vs volumes
+COPY (Dockerfile)
+bygger fil ind i image
+statisk
+COPY target/app.jar app.jar
+volumes (compose)
+runtime binding
+dynamisk
+
+👉 Brug:
+
+COPY = production build
+volumes = development / data persistence
+🐙 Docker Compose
+7. Hvorfor Docker Compose?
+
+Docker Compose
+
+👉 Fordele:
+
+flere containers samtidig
+netværk mellem services
+nem opsætning
+
+Eksempel:
+
+app
+database
+redis
+8. Deployment med Docker / Compose
+Docker:
+docker build -t app .
+docker run app
+Compose:
+docker compose up -d
+
+👉 Compose = hele systemet i én kommando
+
+9. image vs dockerfile i compose
+image:
+bruger eksisterende image
+image: mysql:8
+build / dockerfile:
+bygger selv image
+build:
+  context: .
+  dockerfile: Dockerfile
+
+👉 image = færdig
+👉 dockerfile = bygges selv
+
+10. Port mapping
+ports:
+  - "8080:8080"
+
+👉 betyder:
+
+venstre = host (din maskine)
+højre = container
+Avanceret:
+- "127.0.0.1:3307:3306"
+
+👉 betyder:
+
+kun localhost adgang
+sikker database exposure
+💻 DEMONSTRATIONER
+1. Dockerfile struktur
+
+Typisk Java app:
+
+FROM eclipse-temurin:21
+
+WORKDIR /app
+
+COPY target/app.jar app.jar
+
+EXPOSE 8080
+
+CMD ["java", "-jar", "app.jar"]
+2. Start / stop / list containers
+docker ps
+docker ps -a
+docker stop <id>
+docker start <id>
+docker rm <id>
+3. Kør container (-it)
+docker run -it ubuntu bash
+
+👉 giver interaktiv terminal
+
+4. Docker Compose (MySQL eksempel)
+services:
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+
+Kør:
+
+docker compose up -d
+5. Ryd op i images + system
+docker rmi <image>
+docker system prune
+docker image prune
+
+👉 fjerner unused resources
+
+6. Docker build cache optimering
+Dårlig Dockerfile:
+COPY . .
+RUN mvn package
+God Dockerfile (cache-optimeret):
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+COPY src ./src
+RUN mvn package
+
+👉 hvorfor det virker:
+
+dependencies cached
+src ændringer invaliderer ikke alt
+🧠 EKSAMENSFORSTÅELSE (det der giver topkarakter)
+
+Du skal kunne sige:
+
+Docker mindset:
+image = blueprint
+container = running instance
+Docker = isolation + reproducibility
+Compose mindset:
+multi-service system
+infrastructure as code
+Performance:
+cache = speed
+layers = rebuild optimization
+Security:
+port mapping controls exposure
+localhost binding = safer DB
+Architecture:
+app + DB + services = microservice thinking
+🔥 Hvis du vil løfte det til 10/10 niveau
+
+Jeg kan samle alt du har fået (Linux + CI/CD + Docker + Cloud + Tailscale) til:
+
+👉 en fuld eksamens-demo story
+
+Git push
+GitHub Actions build
+Docker build
+VM deploy via Tailscale
+firewall + health check
+rollback scenario
+
+Det er præcis den type setup der giver “cloud engineer”-niveau i eksamen.

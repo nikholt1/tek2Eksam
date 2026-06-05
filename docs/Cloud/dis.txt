@@ -1,0 +1,6 @@
+
+
+1. Vis tailscale hjemmeside https://login.tailscale.com/admin/machines
+2. log ind i tail
+3. vis ufw
+4.

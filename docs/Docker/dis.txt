@@ -1,0 +1,5 @@
+
+1. start compose up
+2. gennemgå compose.yml
+3. gennemgå dockerfile
+4. vis nginx på local er slukket -> curl nginx

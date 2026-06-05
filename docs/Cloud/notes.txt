@@ -1,0 +1,172 @@
+☁️ 6. Cloud
+🧠 TEORI – SPØRGSMÅL
+1. IaaS vs PaaS
+🏗️ IaaS (Infrastructure as a Service)
+
+Cloud Computing
+
+Du får rå infrastruktur
+Du styrer OS, runtime, apps
+
+👉 Eksempler:
+
+VM’er
+netværk
+storage
+
+👉 Du har brugt det når:
+
+du arbejder på en VM
+installerer Docker / Linux services
+🧩 PaaS (Platform as a Service)
+cloud styrer OS og runtime
+du deployer bare appen
+
+👉 Eksempler:
+
+Heroku
+Azure App Service
+Google App Engine
+2. Hvilke cloud services findes udover VM’er?
+
+Cloud tilbyder meget mere end IaaS:
+
+🗄️ Storage
+S3 / blob storage
+🧠 Databaser
+managed SQL / NoSQL
+⚙️ Containers
+Kubernetes / container services
+🔐 Identity
+login / IAM / auth services
+📡 Networking
+load balancers
+firewalls
+DNS services
+
+👉 Cloud = “alt som service”
+
+3. Deploy Spring Boot i cloud
+
+Typisk flow:
+
+Build app (Maven)
+Pak som JAR
+Dockerize
+Upload image
+Run på VM / container service
+
+Eksempel:
+
+java -jar app.jar
+
+eller:
+
+docker run -p 8080:8080 app
+
+👉 cloud = automatiseret deployment pipeline
+
+4. Docker ports og sikkerhed
+
+Docker
+
+Problem:
+-p 8080:8080
+
+👉 åbner service til hele nettet
+
+Risiko:
+open exposure
+scanning fra internet
+attacker adgang
+Bedre:
+127.0.0.1:8080:8080
+
+👉 kun lokal adgang
+
+🚀 DEMONSTRATIONER
+1. CD-del i GitHub Actions
+
+GitHub Actions
+
+Eksempel:
+
+- name: Build Docker image
+  run: docker build -t myapp .
+
+- name: Deploy to VM
+  run: ssh ubuntu@vm "docker pull myapp && docker run -d -p 8080:8080 myapp"
+
+👉 viser:
+
+build
+deploy
+automation
+2. Firewall regler på VM
+
+UFW
+
+Tjek status:
+sudo ufw status
+Åbn port:
+sudo ufw allow 8080
+Luk port:
+sudo ufw deny 8080
+
+👉 forklaring til eksamen:
+
+“Firewall styrer hvilke services der er eksponeret i cloud miljøet”
+
+3. Login til cloud VM
+SSH login:
+
+SSH
+
+ssh ubuntu@<ip>
+
+eller med key:
+
+ssh -i key.pem ubuntu@<ip>
+Typisk cloud flow:
+login via SSH
+deploy container
+check logs
+restart service
+🧠 EKSAMENSFORSTÅELSE (DET VIGTIGSTE)
+☁️ Cloud betyder:
+remote resources
+on-demand computing
+API-baseret infrastructure
+🏗️ IaaS vs PaaS:
+Model	Niveau	Kontroll
+IaaS	VM	fuld kontrol
+PaaS	platform	mindre kontrol
+🔐 Security i cloud:
+firewall (UFW / security groups)
+port exposure
+SSH access
+least privilege
+🚀 Deployment:
+build → package → docker → deploy → run
+automatiseret via CI/CD
+🔥 HVORDAN DU FÅR 10/12
+
+Hvis du forklarer sådan her:
+
+“Jeg bruger IaaS (VM), deployer via CI/CD pipeline, containeriserer med Docker og sikrer adgang via firewall og SSH”
+
+👉 så rammer du hele cloud-stakken.
+
+💡 Hvis du vil tage det til næste niveau
+
+Jeg kan samle hele dit pensum (Linux + Docker + CI/CD + TCP/IP + HTTP + DNS + Cloud) til:
+
+👉
+en fuld eksamens-setup story
+
+Git push
+GitHub Actions build
+Docker deploy
+VM på Tailscale
+firewall + port demo
+Wireshark HTTP + TCP handshake

@@ -1,0 +1,200 @@
+🌍 4. HTTP og DNS
+🌐 DNS (Domain Name System)
+1. Hvem bestemmer IP for et domæne?
+
+Det gør domæneejeren, via deres DNS provider / registrar.
+
+Typisk flow:
+
+Domæne registreres hos en registrar
+DNS records sættes hos en DNS host (fx Cloudflare, AWS Route53)
+De peger på en IP-adresse (serveren)
+
+👉 Altså: ikke internettet selv — men ejeren af domænet.
+
+2. DNS record typer
+
+De vigtigste:
+
+A record → domæne → IPv4
+AAAA record → domæne → IPv6
+CNAME → alias til andet domæne
+MX → mail server
+TXT → verificering / SPF / DKIM
+NS → navneservere
+3. TTL (Time To Live)
+
+TTL = hvor længe en DNS record må caches.
+
+🔼 Høj TTL
+færre DNS requests
+hurtigere load
+mindre fleksibilitet
+🔽 Lav TTL
+hurtigere opdateringer
+mere DNS trafik
+
+👉 bruges ved:
+
+migration
+load balancing ændringer
+4. Autoritativ vs caching DNS
+📌 Autoritativ DNS
+“source of truth”
+indeholder rigtige records
+🧠 Caching DNS
+gemmer tidligere opslag
+hurtigere svar
+fx din router / ISP DNS
+5. Rekursiv resolver
+
+DNS resolver fungerer sådan:
+
+Du spørger “ek.dk?”
+Resolver tjekker cache
+Hvis ikke: spørger root DNS
+spørger TLD (.dk)
+spørger autoritativ server
+returnerer IP
+
+👉 den gør hele arbejdet for dig
+
+🌐 HTTP
+1. GET vs POST
+GET
+henter data
+data i URL
+idempotent
+
+Eksempel:
+
+/products?id=5
+POST
+sender data
+bruges til forms / login
+data i body
+2. HTTP statuskoder
+🟢 2xx (success)
+200 OK
+201 Created
+🟡 3xx (redirect)
+301 permanent
+302 temporary
+🔴 4xx (client error)
+400 bad request
+401 unauthorized
+403 forbidden
+404 not found
+⚫ 5xx (server error)
+500 internal error
+503 service unavailable
+3. Accept vs Content-Type
+Accept
+hvad klienten vil have
+Content-Type
+hvad serveren sender
+
+Eksempel:
+
+Accept: application/json
+Content-Type: application/json
+
+👉 vigtigt i API’er
+
+4. HTTP er stateless – hvordan login virker?
+
+HTTP husker ingenting selv.
+
+👉 login sker via:
+
+cookies
+sessions
+JWT tokens
+Flow:
+login → server giver session cookie
+browser sender cookie med hver request
+server genkender bruger
+💻 DEMONSTRATIONER
+1. DNS lookup (nslookup / host)
+
+nslookup
+
+nslookup ek.dk
+
+eller:
+
+host ek.dk
+
+👉 viser IP-adresse + DNS resolution
+
+2. Avanceret DNS lookup (dig)
+
+dig
+
+dig ek.dk
+mere detaljeret:
+dig +trace ek.dk
+
+👉 viser hele DNS kæden (root → TLD → authoritative)
+
+3. DevTools netværk
+
+Google Chrome DevTools
+
+Demo:
+Åbn hjemmeside
+Gå til Network tab
+Reload side
+
+👉 vis:
+
+requests
+responses
+headers
+status codes
+4. HTTP GET i Wireshark
+
+Wireshark
+
+Curl:
+curl http://example.com
+Wireshark filter:
+http
+
+eller:
+
+http.request.method == "GET"
+
+👉 du kan vise:
+
+GET request
+response headers
+HTML body
+🧠 EKSAMENSFORSTÅELSE
+DNS:
+oversætter domæner → IP
+cache gør det hurtigt
+resolver gør arbejdet
+HTTP:
+request/response model
+stateless protocol
+bruger cookies/tokens til login
+Statuskoder:
+2xx = success
+3xx = redirect
+4xx = client error
+5xx = server error
+Headers:
+Accept = hvad klient vil have
+Content-Type = hvad server sender
+🔥 Hvis du vil gøre det til topkarakter-niveau
+
+Jeg kan samle alt (DNS + HTTP + TCP/IP + Docker + CI/CD + Linux + Cloud) til:
+
+👉 en perfekt eksamens “end-to-end internet demo”
+
+DNS lookup → IP
+TCP handshake i Wireshark
+HTTP request/response
+CI/CD deploy til VM
+health check via Tailscale

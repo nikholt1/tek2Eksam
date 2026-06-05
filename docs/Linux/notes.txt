@@ -1,0 +1,154 @@
+🖥️ 5. Linux-terminalen
+1. Terminal vs shell vs kommando
+🧾 Terminal (fx cmd.exe / Terminal app)
+Et program der giver adgang til tekstbaseret input/output
+Eksempler: Windows Terminal, macOS Terminal
+
+👉 Terminal = “vinduet”
+
+🐚 Shell (fx bash, zsh)
+Programmet der fortolker dine kommandoer
+Oversætter tekst → handlinger i operativsystemet
+
+👉 Shell = “hjernen der udfører kommandoer”
+
+Eksempel:
+
+bash
+zsh
+⚙️ Kommando (fx ls)
+En enkelt instruktion du giver til shellen
+Shellen udfører programmet
+
+Eksempel:
+
+ls
+
+👉 Kommando = “det du siger til systemet”
+
+2. SSH og public key authentication
+🔐 SSH (Secure Shell)
+
+SSH er en protokol til at forbinde sikkert til en remote maskine over netværk.
+
+🔑 Public key authentication
+
+Bruger 2 nøgler:
+
+Private key (på din computer)
+Public key (på serveren)
+
+Flow:
+
+Du forbinder til server
+Server udfordrer din client
+Din private key beviser identitet
+Login uden password
+
+👉 Fordel:
+
+Sikkert
+Ingen passwords over nettet
+Bruges i cloud miljøer
+3. Opret forbindelse via SSH
+ssh user@ip-address
+
+Eksempel:
+
+ssh ubuntu@192.168.1.10
+
+Med key:
+
+ssh -i mykey.pem ubuntu@ip-address
+💻 DEMONSTRATIONER
+1. Opret og naviger mapper
+mkdir project
+cd project
+pwd
+ls
+cd ..
+2. Opret og rediger fil (terminal editor)
+Nano:
+nano file.txt
+
+Skriv tekst → gem:
+
+CTRL + O (save)
+CTRL + X (exit)
+3. Overfør filer med SCP
+
+SCP
+
+Upload til server:
+scp file.txt user@ip:/home/user/
+Download fra server:
+scp user@ip:/home/user/file.txt .
+4. Søg i filer (head, tail, cat, less, grep)
+Vis hele filen:
+cat file.txt
+Første linjer:
+head file.txt
+Sidste linjer:
+tail file.txt
+Scroll view:
+less file.txt
+Søg tekst:
+grep "error" file.txt
+5. Pipe output til fil (>)
+echo "hello" > file.txt
+
+👉 Overskriver filen
+
+6. Pipe output til andet program (|)
+cat file.txt | grep "error"
+
+👉 Output fra cat bliver input til grep
+
+7. Undgå overskrivning af filer
+Brug >> (append)
+echo "new line" >> file.txt
+
+👉 Tilføjer i stedet for at overskrive
+
+Ekstra sikkerhed (bash option):
+set -o noclobber
+
+Så blokeres:
+
+> file.txt
+8. Filrettigheder og chmod
+Eksempel:
+-rwxr--r--
+📌 Betydning
+Del	Betydning
+r	read
+w	write
+x	execute
+Opdeling:
+rwx = ejer
+r-- = gruppe
+r-- = alle andre
+🛠️ Skift rettigheder
+Giv execute:
+chmod +x script.sh
+Sæt fulde rettigheder:
+chmod 755 file.sh
+
+Forklaring:
+
+7 = rwx
+5 = r-x
+5 = r-x
+🔥 EKSAMENS-TIP (meget vigtigt)
+
+Hvis du vil score højt, så forklar sådan her:
+
+Terminal = interface
+Shell = fortolker
+SSH = sikker fjernadgang
+chmod = sikkerhedsmodel
+pipe = data flow mellem programmer
+
+👉 Det viser “systemforståelse”, ikke bare commands.
+
+Hvis du vil, kan jeg samle Linux + Cloud + CI/CD til én perfekt 10/10 eksamensdemo, så det hele hænger sammen som en story.
