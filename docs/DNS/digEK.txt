@@ -1,0 +1,38 @@
+; <<>> DiG 9.18.39-0ubuntu0.24.04.3-Ubuntu <<>> +trace ek.dk
+;; global options: +cmd
+.			447713	IN	NS	h.root-servers.net.
+.			447713	IN	NS	e.root-servers.net.
+.			447713	IN	NS	l.root-servers.net.
+.			447713	IN	NS	i.root-servers.net.
+.			447713	IN	NS	f.root-servers.net.
+.			447713	IN	NS	m.root-servers.net.
+.			447713	IN	NS	j.root-servers.net.
+.			447713	IN	NS	b.root-servers.net.
+.			447713	IN	NS	d.root-servers.net.
+.			447713	IN	NS	k.root-servers.net.
+.			447713	IN	NS	a.root-servers.net.
+.			447713	IN	NS	g.root-servers.net.
+.			447713	IN	NS	c.root-servers.net.
+;; Received 811 bytes from 127.0.0.53#53(127.0.0.53) in 13 ms
+
+dk.			172800	IN	NS	t.nic.dk.
+dk.			172800	IN	NS	s.nic.dk.
+dk.			172800	IN	NS	b.nic.dk.
+dk.			172800	IN	NS	h.nic.dk.
+dk.			172800	IN	NS	l.nic.dk.
+dk.			172800	IN	NS	c.nic.dk.
+dk.			86400	IN	DS	20109 13 2 5C86A68AE2C3AB74182B3AD0749B46E55F892B835F9578CFA12F9093 FB252BD0
+dk.			86400	IN	RRSIG	DS 8 1 86400 20260619050000 20260606040000 54393 . lnRdIuorRctW1tlGahQjDD/C57el9sp6NhWv6CVgrt9kqNF5sokkSaKv BJsRyuBMXGjUmFuKf/bxin+VzolPulvVfzMxsNVVCwQ8e8+jkuKNEpEH WFH3bgG/uqfoFKC+KAPM+IpSL7uXYlhgUxBIz10Sd1HgFXgzsyrDgEKg xvZ9yCH4Vpni1lOAmNLVcPS6faFNRW6yJvAQ1qMCEHTiZJZ9oKYml6IA meL3pmpug3cQnwLozIyRsHDzTcpBzsERg99JnmJF+AJuHk/h3Vs2yOp8 BfdGBj7IcjmBbtrajohdsXI5bsdVMsxaP1I0EcV0eXxilyY+LIfEFjiK YyWRug==
+;; Received 761 bytes from 170.247.170.2#53(b.root-servers.net) in 27 ms
+
+ek.dk.			86400	IN	NS	ns2.efif.dk.
+ek.dk.			86400	IN	NS	ns.efif.dk.
+ek.dk.			86400	IN	NS	ns3.efif.dk.
+ek.dk.			7200	IN	DS	44170 14 4 4FB0E308DB2A8A2463851EAABEB984A38818CA9F4CE76CF2AF58E9E2 69D94E493CBA65C82312BE77081A615383BB4DDD
+ek.dk.			7200	IN	DS	21899 14 4 D263746EA70120237039362306D90A4E5E06CF69DE2ED02FFF42F653 74233546B065E7F47031C1554375DAD781C77FD4
+ek.dk.			7200	IN	RRSIG	DS 13 2 7200 20260628175402 20260531162402 20008 dk. RyD3TYBehs/a6AqmQ4NcsKh0gco7eDI7pYrMiGv7vkg0VnpFq49C2QaY nSp7knUxiJmQACl/OwQrrWeFHSBoFg==
+;; Received 366 bytes from 185.159.199.45#53(c.nic.dk) in 27 ms
+
+ek.dk.			600	IN	A	195.254.168.52
+ek.dk.			600	IN	RRSIG	A 14 2 600 20260611180753 20260601170753 52423 ek.dk. UvZiza5RcNxJ/z4R8qRpCNX7aoxyDWCF6alZ4GrxIVcf/nR5K92sevBE kfgTX10oWpotH8wldMID2fquyihIRalTbnCRdl/Zwm6xjRJOIEEN/IC9 d7mJU6fCRw7c03we
+;; Received 183 bytes from 20.23.170.35#53(ns3.efif.dk) in 26 ms
