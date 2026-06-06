@@ -1,3 +1,5 @@
 1. Gennemgå CI java test workflow
 2. gennemgå GHCR push workflow
 3. Vis chained workflow på github https://github.com/nikholt1/tek2Eksam/actions/runs/27010082701
+
+8 min

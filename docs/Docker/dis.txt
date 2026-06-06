@@ -3,3 +3,6 @@
 2. gennemgå compose.yml
 3. gennemgå dockerfile
 4. vis nginx på local er slukket -> curl nginx
+5. vis docker network i list og net
+
+tid 8.45 min
