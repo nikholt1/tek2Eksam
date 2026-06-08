@@ -2,4 +2,78 @@
 2. gennemgå GHCR push workflow
 3. Vis chained workflow på github https://github.com/nikholt1/tek2Eksam/actions/runs/27010082701
 
-8 min
+https://github.com/actions/checkout
+docker pull ghcr.io/nikholt1/tek2eksam:master-f95c568
+
+
+CI / CD er en metode der ofte er tæt knyttet med DevOps.
+Det er automatisering af at teste, kvalitetssikre og rulle det programmet
+man arbejder på ud, gennem versionsstyring.
+
+Hvis vi anser det som et bageri der laver kager
+så er programmet kagen
+CI er kvalitetskontrollen af opskriften
+CD er kagen der bliver pakket i en æske og sendt til tag selv bordet.
+Hvis der allerede var en kage ved bordet bliver den byttet ud med den nye.
+
+
+Github actions giver os en fuld integreret plaform PaaS oplevelse, hvor vi
+via automatiserede runners administrerer hele vores programs livscyklus.
+fra CI til CD.
+
+hvis vi ser på vores workflow java-test-reusable.yml.
+
+så er det første interessante en af triggersne ved "on".
+her ser vi nemlig "workflow_call" denne trigger tillader at vi kan forbinde dette workflow
+med andre workflows og lave workflow chaining for at kunne lave et helt CI/CD kombineret workflow.
+
+Jobs kan være flere end ét job, og 1 job kan have flere steps.
+hvert job er en faktisk runner, hvor vi fortæller github actions hvilken os
+runneren skal køre på, og hvilke rettigheder den har.
+
+til et job hører der steps til, som er de faktiske programmer og commands vi kan køre på
+runneren for at teste og eller deploye vores program.
+
+i vores tilfælde kører det på ubuntu-latest, og skal have permission til at read vores content for at det
+kan lave den checkout der kommer senere.
+
+Lige efter rammer vi faktisk det checkout, hvor vi anvender actions checkout repository, hvor vi har
+hashpinned det til version 6.0.2.
+Det gør vi for at sikre at workflowet kører stabilt over tid, og at vi ungår situationer som for eksempel npm
+hvor nogle prgorammer havde auto update og derved kunne være udsat for supply chain angreb
+
+herefter har vi vores java-setup der ligeledes er hashpinned, som installerer java version 25 fra temurin på runneren så vi kan køre vores program
+og til sidst har vi vores test der kører life cycle fra clean til test.
+i vores tilfælde kører det i batch mode, der fortæller maven at det kører automatiseret og fjerner unødige log-teksts, og sikrer at det ikke går i stå.
+
+det bringer os til vores push-ghcr, som er vores CD.
+i dette tilfælde er det on push til master.
+
+vi sætter en global variabel til registry der hedder ghcr.io.
+og sætter vores image name til at være navnet på projektet.
+
+under jobs kører vi faktisk det workflow vi så tidligere og ligeledes en docker test workflow
+
+Der hvor det bliver interessant er ved build and push
+hvor vi giver permission til packages write, da dette job skal
+skrive vores docker image til vores packages på github.
+
+et af stepsne er for eksempel at vi logger ind i GHCR, ved hjælp af login-action som er provided af docker.
+her logger vi ind i vores registry, som den bruger der trigger workflowed,
+og en auytomatisk udstedt token til runneren.
+
+derefter laver vi et tags og labels extract
+hvor første linje bruger git-branch vi lige har pushed til og bruger branchens navn som version.
+næste linje giver os en Sha commit hash med branchets navn foran
+sidste linje tvinger et statisk tag med teksten latest på vores image, men kun hvis det er default branch.
+
+til sidst pusher vi med context all og tager det output der er fra tags og labels til vores registry.
+
+Som vi ser i vores workflows, kan vi se en workflow chain, det er en del af dem vi lige har set på.
+hvis den første fejler, så kører den næste faktisk ikke, og så fejler hele workflowed.
+det tillader os at vi ved push ikke ender med at pushe kode til vores registry hvor vores CI fejer.
+
+
+
+
+

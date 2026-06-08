@@ -6,3 +6,107 @@
 5. vis docker network i list og net
 
 tid 8.45 min
+
+
+Docker
+docker er en containerplatform der gør det muligt at at pakke en applikation og den afhængigheder ind i et isoleret miljø
+som kan køre ens på tværs af alle operativ systemer så længe de har docker installeret.
+Tidligere havde man problemet med "works on my machine" hvilket docker løser.
+
+
+Containere er en let isoleret enhed der indeholder hvad en application
+skal bruge for at køre, det kan være kode, programmer og dependencies.
+
+
+et Docker image som er det der kører på en container er en skabelon der definerer præcius hvad containeren skal indeholde
+og bruges til at starte containeren.
+
+En måde at se docker på, er CAKE
+vi har en opskrift på kagen
+vi har selve kagen
+og så har vi hvordan kagen serveres.
+
+opskriften er dockerfilen
+Det er også det mange kalder for (the reactor)
+En dockerfile kan være multistage eller monostage.
+En dockerfiles indeholder en præcis liste over kildekode, værktøjer, dependencies osv.
+Den bruges til at lave det færdige docker image.
+
+i vores dockerfil kan vi se, at
+opskriften starter med at hente en tung version af maven, og java 25.
+Det gør at vi kan anvende det senere, og kalder det "build"
+
+Derefter opretter og skifter til mappen /app inde i containeren.
+
+Herefter kopierer vi den pom.xml som er i vores projekt, som er listen over dependencies som vi har behov for.
+
+Herefter kopierer vi vores kildekode fra src mappen, ind i containeren.
+
+derefter kompilerer vi koden og pakker den til en færdig .jar fil. og skipper tests.
+
+Når vi nu har lavet selve opskriften på vores applikation kan vi gå videre til hvordan den skal køres.
+først starter vi forfra med en meget let image, alpine.
+herefter opretter vi igen en /app mappe i containeren.
+så kopierer vi den *.jar (hvad end den hedder) der ligger i target folderen ind i containerern og kalder den "app.jar"
+og til sidst definerer vi at når containeren bliver startet, så skal den execute java -jar app.jar og køre vores program.
+
+Grunden til at man bruger multistage, er at det gør vores arbejde mere fleksibelt, i og med
+at vi kan pakke vores program ind i en mindre container. Så istedet for at ende med store images der ville tage lang tid at downloade
+så ender vi med en markant mindre image, der faktisk er hurtigere at downloade, og hurtigere at køre i containerne.
+
+Udover dockerfilen, nu når vi siger at dockerfilen er opskriften, det image vi får ud er den færdigbagte kage, og containeren er den måde kagen serveres på.
+
+Når vi serverer kagen, vil vi også gerne have tilbehør med.
+selve kagebordet er compose filen.
+Compose filen definerer hvor mange og hvilke images der skal køre, og hvilke hører til hvad.
+Det vil sige, at med vores applikation, kan vi for eksempel køre mySQL og nginx og så portmappe dem for at skabe en infrastruktur, som vi på vores lokale maskine
+slet ikke behøver at have installeret, og med så "slim" versioner som muligt.
+
+Ud fra vores compose kan vi se at vi har 3 services.
+1. nginx
+2. db
+3. app
+
+hvis vi tager et hurtigt kig på port mappingen,
+så kan vi se at vi starter med nginx, den er åben på host computeren og til alle på netværket.
+applikationen er åbent kun for host computeren, på port 8090
+imens at db er ligeledes kun åben for host computeren på port 3307.
+
+Så docker netværket er nginx -> app -> db hvor vi som host computer har adgang til de forskellige dele imens at andre
+computere på netværket kun har adgang til nginx på samme netværk.
+
+under vores service nginx, kan vi se at vi overrider default værdierne for
+.conf filen og for index filen som vi får fra vores frontend mappe src og nginx.
+
+går vi videre til database kan vi se at vi først og fremmest får vores database værdier fra .env filen.
+det næste der er spænende, er at vi sætter vores volume allerede her, det er navnet på den permanente lagerplads som docker har på host computeren.
+og ligger det ind i mappen i containeren.
+
+hvis vi så går videre til vores app service, kan vi se at den ligeledes henter data fra vores .env fil som henter det fra vores .env.
+grunden til at vi gør det, er fordi at .env er vores one truth, imens at ores .properties bliver sat til det som er defineret i .env ved runtime.
+derved kan vi bruge det til både compose filen og til vores properties.
+
+det sidste der er spænende her er, images.
+hver service har defineret et image det skal køre, og de er lavet på samme måde som dockerfilen definerede tidligere.
+det er images som er klar til at køre på containere.
+den af images der er spænende er build.
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+her bygger vi vores egen applikations image ud fra dockjerfilen. først fortæller vi docker at kildekoden er i src og pom ligger der vore hvor kører compose fra altså "."
+derefter fortæller vi docker præcis hvor vores dockerfile er, og i og med at det er i samme mappe som vi startede compose fra, så hedder den bar dockerfile.
+
+når vi composer up, så har vi flere muligheder, vi kan køre -d som i detatched mode, hvor vi ikke ser det, eller vi kan bare compose up
+hvor den viser os loggen, og så kan vi trykke d, hvor vi så detatcher når vi ikke har behov for at se på det mere.
+når det hele kører kan vi faktisk se vores netværk ved at skrive docker ps -a.
+her kan vi så se den port mapping vi havde defineret.
+
+Derudover har vi muligheden for at gå ind i docker containerne, for eksempel ind i vores nginx container ved at skrive
+docker exec -it <nginxid> bash
+og her kan vi faktisk prøve at køre en curl på curl http://app:8080/logs hvor vi så får vores data tilbage hentet gennem appen i database i json format.
+
+
+
+
+
