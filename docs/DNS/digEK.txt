@@ -36,3 +36,8 @@ ek.dk.			7200	IN	RRSIG	DS 13 2 7200 20260628175402 20260531162402 20008 dk. RyD3
 ek.dk.			600	IN	A	195.254.168.52
 ek.dk.			600	IN	RRSIG	A 14 2 600 20260611180753 20260601170753 52423 ek.dk. UvZiza5RcNxJ/z4R8qRpCNX7aoxyDWCF6alZ4GrxIVcf/nR5K92sevBE kfgTX10oWpotH8wldMID2fquyihIRalTbnCRdl/Zwm6xjRJOIEEN/IC9 d7mJU6fCRw7c03we
 ;; Received 183 bytes from 20.23.170.35#53(ns3.efif.dk) in 26 ms
+
+
+
+
+for ip in $(dig hsploit.com +short); do curl -s "https://ipinfo.io/$ip/json"; echo; done

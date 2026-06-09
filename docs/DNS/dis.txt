@@ -1,0 +1,9 @@
+
+
+1. Forklar DNS
+2. vis diagram
+3. find ek.dk
+4. nslookup
+5. forklar dig output og sammenlign med diagram
+6. wireshark, vis en curl / HTTP (forklar)
+

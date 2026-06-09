@@ -1,0 +1,10 @@
+
+
+1. vis egen ip
+2. vis tailscale ip
+3. forklar forskel på ipv4 og 6
+4. find offentlig ip
+5. finde ek.dks ip
+6. forklare TCP handshake
+7. forklare TCP data transfer
+8. forklare TCP teardown
