@@ -7,3 +7,42 @@
 5. forklar dig output og sammenlign med diagram
 6. wireshark, vis en curl / HTTP (forklar)
 
+
+DNS er ligesom en addresse bog.
+Hvis vi gerne vil sende og modtage post til og fra klaus
+så skal vi bruge hans addresse. Det kan vi finde ud fra hans fornavn, mellemnavn og efternavn.
+I DNS hedder det subdomain www domain klaus top level domain .dk
+Hvis vi laver en nslookup på klaus så får vi hans navn og hans addresse.
+
+addressen kan vi i vores browser have cached, det kan ligeledes være cached på vores router eller ved vores udbyders DNS.
+Men såfremt ingen af dem har gemt dem, så må vi slå klauses addresse op, gennem en DNS resovle.
+
+én måde at lave resolve på er recursive resolve. Her spørger DNS resolveren flere forskellige servere, før den får klauses addresse.
+Hvis vi laver en dig klaus.dk, kan vi se at vi får en "A" record ud med klauses addresse.
+A recorden stammer fra authoritative name server, så det vil sige at vores resolver faktisk har spurgt igennem systemet, men bare ikke viser det.
+
+Hvis vi nu laver +trace på vores dig, kan vi se at vi faktisk først spørger root name server, der henviser os til nogle forskellige TLD name servers som henviser os til nogle forskellige
+Authoritative name servers hvor vi til sidst fra en bestemt ANS får en A record tilbage med addressen.
+
+Når vi så ved hvor klaus bor, så kan vi sende ham et postkort
+her har vi to muligheder, HTTP og HTTPS.
+HTTP er plain text og svarer til at sende post kortet som det er med teksten fremme.
+HTTPS er krpyeret og kræver et certifikat, som viser at vi klaus faktisk er den klaus vi leder efter.
+
+hvis vi prøver at køre vores eget program og skriver vores endpoint.
+så kan vi i vores browser se at vi får json tilbage, under network kan vi faktisk se de requests vi har lavet.
+men hvis vi åbner wireshark og gør det samme, kan vi se det samme bare bedre vist.
+her kan vi se at vi i vores GET laver accepterer html, det er det vi forventer.
+når vi går til vores response, kan vi se at vi får en status kode 200 det vil sige at alt er ok.
+herunder kan vi se at content-type er application/json, så den sender det dataen og fortæller os at dataen kommer til at være i json format.
+under JON, kan vi faktisk se den array som vi også fik i browseren af de timestamps som vi forventede i json format.
+
+Hvis vi ser på HTTP, der medfølger TLS. når vi har oprettet forbindelse med serveren, announce vi først at vi er der.
+det er ligesom at klaus får en besked om at der er en pakke til ham, hvori der står at vi gerne vil have en pakke tilbage.
+Herunder laver vi en TLSv handshake protokol. vi kan se at vi nu kommunikerer på port 443.
+her giver vi cipher suites, hvilken server_name vi gerne vil ind på og vores public key share
+herefter svarer serveren tilbage med server hello. herunder ser vi
+cipher suite, som er hvilken kryptering vi skal bruge, og deres del af key.
+så ser vi change cipher spec, det er herfra at alt nu er krypteret.
+
+TLS er en overbygning på HTTP, så alt kommunikation foregår stadig på samme måde som før, men det er nu krypteret.

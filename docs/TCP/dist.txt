@@ -8,3 +8,40 @@
 6. forklare TCP handshake
 7. forklare TCP data transfer
 8. forklare TCP teardown
+
+
+IP addresser er vores addresse på internettet.
+Man kan se det som at vi bor i en by, hvor hvert hus har en andresse som andre kan finde frem til.
+Huset svarer til vores hjemmenetværk og routeren fungerer som forbindelse mellem huset og resten af internettet.
+Routeren har en public IP addresse som bliver tildelt af internetudbyderen.
+
+Inde i huset har vi det lokale netwærk LAN, her giver routeren enhederne på netværket private ip addresser ved hjælp af DHCP. som vi kan se her, i wireshark.
+Her anvendes ofte subnetting som betyder at man opdeler et netværk i subnetværk
+
+hvis vi åbner en terminal og skriver curl https://ipinfo.io så får vi ores public ip addresse givet af vores interent udbyder.
+hvis vi skriver ifconfig ser vi vores private ip-addresse som kun gælder på det lokale netværk.
+
+Under ifconfig finder vi også vores mac addresser, som er addressen på vores netværks kort, den bruges i det lokale netværk til at finde den rigtige enhed når vi har IP addresserne.
+Hvis computeren nu kender IP addressen, men ikke ved hvilken enhed den tilhører så bruger den ARP address resolution protocol.
+
+Her spørger computeren "hvem har denne ip addresse og hvad er din mac addresse."
+
+Nu når vi ved hvilken computer vi vil kommunikere med, og har fundet dens mac addressse, kan vi begynde at sende data.
+Her bruger vi protokoller så som UDP og TCP, som bestemmer hvordan data bliver sendt.
+
+forskellen er at UDP sender data som pakker uden at sikre at de kommer frem.
+imens at TCP sørger for, at data bliver leveret korrekt.
+hvis vi ser på tcpSYNToFIN kan vi se at det opdeler data i pakker, sender dem afsted of får bekræftigelse.
+
+Først skal vi lave en three way handshake i TCP, vi
+sender først en besked til serveren, og spørger om vi må få forbindelse.
+Serveren svarer med SYN ACK,
+hvor vi svarer med ACK, på at vi er forbundet.
+
+nu kan vi begynde at sende og modtage data.
+her ser vi et segment, altså en del af den samlede data, fra det json vi fik.
+her viser det at sequence number starter på x og det det indeholder xxx bytes, så derfor er den næste 416.
+ACK betyder at vi har modtaget alt op til 581 og er klar til at det næste bliver sendt.
+
+
+

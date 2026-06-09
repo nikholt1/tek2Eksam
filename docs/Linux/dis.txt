@@ -1,0 +1,57 @@
+
+
+
+
+Linux er et operativ system der blev lavet
+af Linus Torvalds.
+Linux bliver brugt af 96% af verdens top 1
+million webservere, imens at 100% af verdens hurtigste super computere.
+
+En af linux styrker er terminalen, hvor man åbent kan styre systemet med kommandoer.
+Linux er et nonfailsafe environment, hvilket betyder at den ikke
+spørger om du er sikker, udover hvis du vil udføre en handling som kun hører til root (sudo)
+
+Når vi åbner terminalen, åbner vi i hvertfald på
+linux mint en bash (shell) en burn again shell, der er kommunikerer med
+operativ systemet.
+
+her har vi muligheden for at gøre lige hvad vi har lyst til med computeren.
+pwd viser den directory vi er i lige nu.
+ls viser de filer der ligger i det directory
+og cd tillader os at navigere frem og tilbage.
+
+kommandoer har også udviddede funktioner, så som ls -l
+der også viser fil rettigheder imens at ls -a viser hidden files.
+
+nu når vi kan se på rettighederne, kan vi se at det står for
+Ejerens rettigheder
+gruppens rettigheder
+og andre brugeres rettigheder.
+
+Lad os lave en fil med nano
+vi laver det om til et hurtigt script med #!bin/bash
+og skriver echo hello world.
+når vi skriver det, så ser operativ systemet #! suffixen, og ved at den skal åbne
+vores script som et bash program, bash læser så resten af filen og executer dem line by line.
+
+men hvordan executer vi filen, for hvis vi skriver ls, ser vi at vi ikke har execute rettigheder.
+derfor anvender vi noget der hedder changemode.
+for at ændre privileges kan vi angive et tal som for exempel 755.
+de kan være svære at huske, men en standart er 755.
+her får ejeren alle rettigheder, gruppen får read og execute og andre får read and execute, hvilket er standart
+for linux script opbygning.
+
+hvis vi gerne vil skifte brugere, nu har jeg ikke andre brugere på denne computer, men så ville man anvende "chown"
+
+Ligesom system manager på windows, hvor man kan se at den kører mange processer, så gør linux det samme.
+men vi har ikke en standart manager, derfor anvender vi for exempel top. her kan vi se at alle processer har en id, (PID)
+Hvis vi for eksempel udvikler et program der skal starte subprocesser, så får de en PID, vi kan hente ud.
+når vi så gerne vil stoppe vores subprocess kan vi bruge kill -9 <pid> for at stoppe programmet.
+-9 betyder force.
+
+istedet for at skrive alle kommander efter hindanden, kan vi pipe dem, hvis vi ved hvad formatet af outputtet er.
+
+med vores cript kan vi anvende pipe, med for exempel "rev" der reverser outputtet.
+så bash hello | rev giver os hello i reverse.
+
+
