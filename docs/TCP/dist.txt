@@ -10,38 +10,53 @@
 8. forklare TCP teardown
 
 
-IP addresser er vores addresse på internettet.
-Man kan se det som at vi bor i en by, hvor hvert hus har en andresse som andre kan finde frem til.
-Huset svarer til vores hjemmenetværk og routeren fungerer som forbindelse mellem huset og resten af internettet.
-Routeren har en public IP addresse som bliver tildelt af internetudbyderen.
+En IP addresse er en addresse på internettet.
+Vores router får en public IP addresse af vores internetudbyder
+Inde i hjemmenetværket får enheder private IP addresser via DHCP
+curl https://ipinfo.io vis public
+ifconfig vis private
 
-Inde i huset har vi det lokale netwærk LAN, her giver routeren enhederne på netværket private ip addresser ved hjælp af DHCP. som vi kan se her, i wireshark.
-Her anvendes ofte subnetting som betyder at man opdeler et netværk i subnetværk
+DHCP fungerer ved at klienten spørger discover som en broadcast.
+Offer er serveren der tilbyder en IP Adresse
+Request er at klienten gerne vil bruge den tilbudte
+og herefter bekræfter serveren med en ACK.
 
-hvis vi åbner en terminal og skriver curl https://ipinfo.io så får vi ores public ip addresse givet af vores interent udbyder.
-hvis vi skriver ifconfig ser vi vores private ip-addresse som kun gælder på det lokale netværk.
+Det kan også fungere på den måde at requesten indeholder den IP addresse som klienten har haft før
+hvis den ikke er taget så responder serveren med simpelt ACK, eller skal klienten igennem DORA the explorer.
 
-Under ifconfig finder vi også vores mac addresser, som er addressen på vores netværks kort, den bruges i det lokale netværk til at finde den rigtige enhed når vi har IP addresserne.
-Hvis computeren nu kender IP addressen, men ikke ved hvilken enhed den tilhører så bruger den ARP address resolution protocol.
+På det lokale netwærk fortæller den private IP addresse hvilken enhed der skal kontaktes.
+Subnetmasken afgør om destinationen rent faktisk er på det samme lokale netværk
 
-Her spørger computeren "hvem har denne ip addresse og hvad er din mac addresse."
+Hvis den er på samme subnet, så anvendes ARP til at finde destinationens MAC addresse.
 
-Nu når vi ved hvilken computer vi vil kommunikere med, og har fundet dens mac addressse, kan vi begynde at sende data.
-Her bruger vi protokoller så som UDP og TCP, som bestemmer hvordan data bliver sendt.
+Hvis den er uden for subnettet sendes det til routerens default gateway.
+MAC addressen identificerer det netværkskort på det lokale netværk.
+(vis ARP)
 
-forskellen er at UDP sender data som pakker uden at sikre at de kommer frem.
-imens at TCP sørger for, at data bliver leveret korrekt.
-hvis vi ser på tcpSYNToFIN kan vi se at det opdeler data i pakker, sender dem afsted of får bekræftigelse.
+Nu når vi ved hvor dataen skal hen, så skal vi finde ud af hvordan vi gør det.
+her har vi blandt andet mulighederne TCP og UDP.
+forskellen på de to er, at UDP sender pakkerne uden garanti, og forventer ikke noget svar
+imens at TCP sikrer leveringen, rækkefølgen og har fejlkontrol.
 
-Først skal vi lave en three way handshake i TCP, vi
-sender først en besked til serveren, og spørger om vi må få forbindelse.
-Serveren svarer med SYN ACK,
-hvor vi svarer med ACK, på at vi er forbundet.
+Først opretter vi forbindelsen med three way handshake.
+først spørger vi om vi må oprette forbindelse med SYN (SYNcronize)
+Herefter svarer serveren tilbage med SYN ACK, som i vi kan godt syncronisere
+og så sender vi tilbage ACK at vi er med på at vi kan syncronisere.
 
-nu kan vi begynde at sende og modtage data.
-her ser vi et segment, altså en del af den samlede data, fra det json vi fik.
-her viser det at sequence number starter på x og det det indeholder xxx bytes, så derfor er den næste 416.
-ACK betyder at vi har modtaget alt op til 581 og er klar til at det næste bliver sendt.
+Herfra kan vi så begynde vores dataoverførsel.
+I et TCP segment, har vi en del af den fulde pakke vi gerne vil overføre,
+dvs at vi har bytes af data, men ikke nødvendigvis den fulde pakke.
+Derfor anvender vi sequence numbers til at vise hvor i datastrømmen vores segment hører til
+ACK fortæller os hvor meget data modtageren har modtaget.
+
+Når vi er færdige laver vi et tear down, for at afslutte clean.
+først sender den ene part FIN, for at signalere at den er færdig med at sende data.
+modparten sender ACK for at bekræfte at det er modtaget.
+når modtparten så er færdog med at sende data sender den sin egen FIN,
+og til sidst sendes en ACK of forbindelsen er lukket.
+
+Det kan også se ud som FIN ACK, FIN ACK, ACK
+hvor det sidste data bliver overført i samme segment som den ene part afslutter med.
 
 
 

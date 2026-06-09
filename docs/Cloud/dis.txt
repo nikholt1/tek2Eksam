@@ -8,3 +8,49 @@
 6. remote ind i image
 7. vis connection
 7 verify at der ikke er connection udefra.
+
+Cloud bruges til at køre software og servere på andres hardware
+over internettet istedet for at have en on-site server.
+
+Det bruges ofte til hosting af websites og apps, databaser og API'er
+
+Til dette kan man bruge IaaS og PaaS
+IaaS står vi selv for serveren. det vil sige at det er infastrukturen hardwaren
+der er tilgængelig, imens alt software skal vi selv stå for. Ukonfigureret environment.
+
+PaaS er configured og maintained environment, det vil sige at det er platforme som kan være for eksempel VM men som er
+konfigureret, der er i stand til at hoste vores applikation eller køre workflows for os.
+
+Der er flere forskellige udbydere af IaaS, jeg har valgt at bruge tailscale.
+forskellen på azure VM og tailscale er at tailscale er et privat VPN netværk,
+de computere jeg har tilknyttet er fysiske computere, min laptop og min server derhjemme.
+De er på samme virtuelle lan. med cloud forbinder vi via public IP over internettet.
+med tailscale forbinder jeg serveren via et privat netværk som tailcale tilbyder.
+
+Når jeg nu har min server kan jeg remote ssh ind i den med
+ssh tail@<ip>
+her er tail username vi gerne vil logge ind som, og ip er addressen på netværket.
+
+Det første vi ville gøre hvis det var en fresh VM, ville være at opdatere pakkerne
+med sudo apt update. når pakkerne er på maskinen kan vi installere de programmer vi skal bruge til vores configuration, så som firewall configuration som hedder ufw.
+jeg laver et script så vi kan køre det senere, i tilfælde af at der sker en fejl
+ufw allow 20
+ufw allow 80/tcp
+ufw allow 443/tcp
+
+ufw reload.
+hvis nede ufw enable.
+
+laver det i #!/bin/bash så vi kan køre det ud fra chmod senere.
+
+nu når vores VM kører, kan vi pinge den fra vores lokale computer her.
+ping addressen
+det viser os at vi sender pakker til serveren, får pakkerne retur og hvor lang tid det tager.
+
+når vi nu har pakkerne på serveren, kunne vi ligeledes installere Nginx siden det er den der kører på port 80, hvis vi configurerer den til det.
+i ufw ville vi så sætte kun port 20, 80 og 443 til ssh, http og https kommunikation til serveren.
+
+sudo systemctl status nginx, viser at nginx allerede kører og at vi faktisk allerede kan få vores sidde frem i vores lokale maskine fordi den er forbundet.
+hvis vi så i maskinen navigerer ind i vores projekt, og docker composer up, så vil det ændre sig til at vi
+wire vores port 80 til containerens nginx, og på den måde får vores dockers nginx frontend ud
+
